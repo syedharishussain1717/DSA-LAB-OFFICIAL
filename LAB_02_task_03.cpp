@@ -4,26 +4,28 @@
 using namespace std;
 
 // abstract base class 
-class LibraryItem {
+class Item {
 protected:
     string title;
 public:
-    LibraryItem(string t) : title(t) {}
+    Item(string t) : title(t) {}
     // Pure virtual function 
-    virtual void display() const = 0;  
+    virtual void display() const = 0;
+   // getter function 
     string getTitle() const { return title; }
 
 };
 
 // derived book class 
-class Book : public LibraryItem {
+class Book : public Item {
 private:
     string author;
     int pages;
 public:
     // Default constructor
-    Book() : LibraryItem(""), author(""), pages(0) {} 
-    Book(string t, string a, int p) : LibraryItem(t), author(a), pages(p) {}
+    Book() : Item(""), author(""), pages(0) {}
+    // parameterized constructor instializer list 
+    Book(string t, string a, int p) : Item(t), author(a), pages(p) {}
 
     void display() const override {
         cout << "Book Title: " << title << endl;
@@ -35,13 +37,15 @@ public:
 };
 
 // derived Newspaper class 
-class Newspaper : public LibraryItem {
+class Newspaper : public Item {
 private:
     string date;
     int edition;
 public:
-    Newspaper() : LibraryItem(""), date(""), edition(0) {} // Default constructor
-    Newspaper(string t, string d, int e) : LibraryItem(t), date(d), edition(e) {}
+    // Default constructor
+    Newspaper() : Item(""), date(""), edition(0) {} 
+    // parameterized constructor instializer list 
+    Newspaper(string t, string d, int e) : Item(t), date(d), edition(e) {}
 
     void display() const override {
         cout << "Newspaper Name: " << title << endl;
@@ -56,7 +60,7 @@ public:
 class Library {
 private:
     // Maximum capacity for books and newspapers
-    static const int maxSize = 20; 
+    static const int maxSize = 20;
     Book books[maxSize];
     Newspaper newspapers[maxSize];
     int bookCount;
@@ -64,7 +68,7 @@ private:
 
 public:
     Library() : bookCount(0), newspaperCount(0) {}
-   
+
     void addBook(const Book& book) {
         if (bookCount < maxSize) {
             books[bookCount++] = book;
@@ -85,16 +89,16 @@ public:
 
     void displayCollection() const {
         cout << "Books Collection: " << endl;
-        for (int i = 0; i < bookCount; i++) 
+        for (int i = 0; i < bookCount; i++)
         {
             books[i].display();
-        }    
+        }
         cout << "Newspapers Collection: " << endl;
-        for (int i = 0; i < newspaperCount; i++) 
+        for (int i = 0; i < newspaperCount; i++)
         {
             newspapers[i].display();
         }
-          
+
     }
 
     // Sorting books by pages using Bubble Sort
@@ -162,7 +166,7 @@ int main() {
     Newspaper newspaper1("Washington Post", "2024-10-13", 11);
     Newspaper newspaper2("The Times", "2024-10-12", 14);
 
-    
+
     Library library;
 
     // Add books and newspapers to the library
@@ -179,13 +183,13 @@ int main() {
     library.sortBooksByPages();
     library.sortNewspapersByEdition();
 
-    cout << " After Sorting: " << endl;;
+    cout << "After Sorting: " << endl;;
     library.displayCollection();
 
     // Search for a book by title
     Book* foundBook = library.searchBookByTitle("The Catcher in the Rye");
     if (foundBook) {
-        cout << " Found Book: " << endl ;
+        cout << " Found Book: " << endl;
         foundBook->display();
     }
     else {
@@ -195,7 +199,7 @@ int main() {
     // Search for a newspaper by name
     Newspaper* foundNewspaper = library.searchNewspaperByName("The Times");
     if (foundNewspaper) {
-        cout << " Found Newspaper: "<<endl;
+        cout << " Found Newspaper: " << endl;
         foundNewspaper->display();
     }
     else {
