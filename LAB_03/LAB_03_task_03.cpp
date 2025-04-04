@@ -146,19 +146,22 @@ public:
         return secondMax;
     }
     T secondMinOdd() {
-        T firstMinOdd = this->arr[0];
-        T secondMinOdd = this->arr[0];
-        for (int i = 0; i < this->currentSize; i++)
-        {
-            if ((this->arr[i] % 2 != 0) && (this->arr[i] < firstMinOdd))
-            {
-                firstMinOdd = this->arr[i];
+        T firstMinOdd = -1;  
+        T secondMinOdd = -1; 
+
+        // Finding the smallest odd number
+        for (int i = 0; i < this->currentSize; i++) {
+            if (this->arr[i] % 2 != 0) { 
+                if (firstMinOdd == -1 || this->arr[i] < firstMinOdd) {
+                    firstMinOdd = this->arr[i];
+                }
             }
         }
-        for (int j = 0; j < this->currentSize; j++)
-        {
-            if ((this->arr[j] % 2 == 0) && (this->arr[j] < firstMinOdd) && (this->arr[j] > secondMinOdd))
-            {
+
+        // Finding the second smallest odd number
+        for (int j = 0; j < this->currentSize; j++) {
+            if ((this->arr[j] % 2 != 0) && (this->arr[j] > firstMinOdd) &&
+                (secondMinOdd == -1 || this->arr[j] < secondMinOdd)) {
                 secondMinOdd = this->arr[j];
             }
         }
@@ -178,16 +181,66 @@ public:
         }
         cout << endl;
     }
-    void rotateClockwaise(int r) {
-        /*T temp = this->arr[this->currentSize - 1];
- 
-        for (int i = this->currentSize - 1; i < 0; i--)
+    void rotateClockwaise(int r)
+    {
+        int size = this->currentSize;
+        int mid = size / 2;
+
+        // Rotate the first half r times
+        for (int k = 0; k < r; k++)
         {
-            this->arr[i] = this->arr[i - 1];
+            T temp = this->arr[mid - 1];
+            for (int i = mid - 1; i > 0; i--)
+            {
+                this->arr[i] = this->arr[i - 1];
+            }
+            this->arr[0] = temp;
         }
-        this->arr[0] = temp;
-        CustomList::display();*/
+
+        // Rotate the second half r times
+        for (int k = 0; k < r; k++)
+        {
+            T temp = this->arr[size - 1];
+            for (int i = size - 1; i > mid; i--)
+            {
+                this->arr[i] = this->arr[i - 1];
+            }
+            this->arr[mid] = temp;
+        }
+
+        CustomList::display();
     }
+
+    void rotateAntiClockwaise(int r)
+    {
+        int size = this->currentSize;
+        int mid = size / 2;
+
+        // Rotate the first half r times
+        for (int k = 0; k < r; k++)
+        {
+            T temp = this->arr[0];
+            for (int i = 0; i < mid - 1; i++)
+            {
+                this->arr[i] = this->arr[i + 1];
+            }
+            this->arr[mid - 1] = temp;
+        }
+
+        // Rotate the second half r times
+        for (int k = 0; k < r; k++)
+        {
+            T temp = this->arr[mid];
+            for (int i = mid; i < size - 1; i++)
+            {
+                this->arr[i] = this->arr[i + 1];
+            }
+            this->arr[size - 1] = temp;
+        }
+
+        CustomList::display();
+    }
+
 };
 
 int main() {
@@ -197,7 +250,7 @@ int main() {
     list.addElementAtLastIndex(2);
     list.addElementAtLastIndex(3);
     list.addElementAtLastIndex(4);
-    list.addElementAtLastIndex(3);
+    list.addElementAtLastIndex(5);
     list.display();
     /*   cout << "Removing element from start" << endl;
        list.removeElementFromStart();
@@ -208,12 +261,13 @@ int main() {
     cout << "Sum of primes: " << list.sumOfPrimes() << endl;
     cout << "Second Maximum Even Number: " << list.secondMaxEven() << endl;
     cout << "Second Minimum Odd Number: " << list.secondMinOdd() << endl;
-    // printing duplicates
+    /* printing duplicates*/
     list.printDuplicates();
     list.display();
-    //cout << "rotated clockwise: ";
-  
-    //list.rotateClockwaise(1);
-   
+    cout << "rotated clockwise: ";
+    list.rotateClockwaise(1);
+    cout << "rotated Anti clockwise: ";
+    list.rotateAntiClockwaise(1);
+
     return 0;
 }
